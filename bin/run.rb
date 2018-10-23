@@ -104,6 +104,56 @@ elsif answer1 == "Brewery"
         puts z.info
         prompt.keypress("Press any key to see the menu")
         puts z.menu
+    
+    when "State"
+        user_input = prompt.ask("What is the name of the state?") do |q|
+            q.required true
+            q.modify :strip, :collapse
+        end 
+
+        x = Brewery.select {|b| b.state == spacing(user_input)}
+        # binding.pry
+        
+        y = prompt.select("Click to see more info:") do |options|
+                x.collect do |brewery|
+
+            options.choice brewery.name
+            end     
+         end 
+
+        
+        z = x.find do |brewery|
+            brewery.name == y
+        end 
+        
+        puts z.info
+        prompt.keypress("Press any key to see the menu")
+        puts z.menu
+    
+    when "Country"
+        user_input = prompt.ask("What is the name of the country?") do |q|
+            q.required true
+            q.modify :strip, :collapse
+        end 
+
+        x = Brewery.select {|b| b.country == spacing(user_input)}
+        # binding.pry
+        
+        y = prompt.select("Click to see more info:") do |options|
+                x.collect do |brewery|
+
+            options.choice brewery.name
+            end     
+         end 
+
+        
+        z = x.find do |brewery|
+            brewery.name == y
+        end 
+        
+        puts z.info
+        prompt.keypress("Press any key to see the menu")
+        puts z.menu
 
     end 
 
