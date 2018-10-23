@@ -13,9 +13,6 @@ def label
   if self.has_ibu?
     str += " #{self.ibu} ibu."
   end
-  if self.descript != nil 
-    str += " #{self.descript}"
-  end
   str
 end
 

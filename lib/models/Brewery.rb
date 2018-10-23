@@ -21,4 +21,12 @@ class Brewery < ActiveRecord::Base
     r.compact
   end
 
+  def info
+    self.attributes.map do |key, value|
+      if key != "id"
+        value
+      end 
+    end 
+  end  
+
 end
