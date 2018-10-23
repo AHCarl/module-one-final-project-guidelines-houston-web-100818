@@ -11,4 +11,14 @@ class Brewery < ActiveRecord::Base
     Beer.all.where(brewery_id: self.id).count
   end
 
+  def menu 
+    r = self.beers.map do |beer|
+      str = "#{beer.name}"
+      if beer.has_style?
+        str += " - #{beer.style.style_name}"
+      end
+    end
+    r.compact
+  end
+
 end
