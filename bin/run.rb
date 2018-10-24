@@ -40,14 +40,13 @@ def beers_select_label(all_beers)
 end
 
 answer1 = @prompt.select("What do you want to find?", %w(Beer Brewery))
-
 if answer1 == "Beer"
+    
     answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style Display\ All))
-
     case answer2 
     when "Name" 
         user_input = ask("What is the name of the beer?")
-            
+   
         x = Beer.find_by(name: spacing(user_input))
           
         puts x.label
@@ -62,9 +61,9 @@ if answer1 == "Beer"
                 options.choice beer.name
             end     
         end
-
+        
         puts Beer.find_by(name: x).label
-
+        
     when "Style"
         user_input = ask("Which style?") 
             
