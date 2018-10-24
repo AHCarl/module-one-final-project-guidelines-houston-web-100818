@@ -43,6 +43,13 @@ def not_found
     start_prompt
 end
 
+def see_menu_labels(results)
+    puts results.info
+    @prompt.keypress("Press any key to see the menu")
+    beers_select_label(results.beers)
+end
+
+
 def start_prompt
 answer1 = @prompt.select("What do you want to do?", 
     %w(Find\ Beer Find\ Brewery Exit))
@@ -60,6 +67,7 @@ if answer1 == "Find Beer"
     rescue 
         not_found
     end
+    start_prompt
 
     when "Brewery"
         user_input = ask("What is the name of the brewery?")
@@ -76,6 +84,7 @@ if answer1 == "Find Beer"
     rescue 
         not_found
     end
+    start_prompt
         
     when "Style"
         user_input = ask("Which style?") 
@@ -86,6 +95,7 @@ if answer1 == "Find Beer"
         end
         x= more_info(found_by_style)
         puts Beer.find_by(name: x).label
+        start_prompt
     
     when "Display\ All"
         beers_select_label(Beer.all)
@@ -117,9 +127,10 @@ elsif answer1 == "Find Brewery"
         end
         z = Brewery.find_by(name: y)
         
-        puts z.info
-        @prompt.keypress("Press any key to see the menu")
-        beers_select_label(z.beers)
+        # puts z.info
+        # @prompt.keypress("Press any key to see the menu")
+        # beers_select_label(z.beers)
+        see_menu_labels(z)
         start_prompt
     when "State"
         user_input = ask("What is the name of the state?")
@@ -133,9 +144,7 @@ elsif answer1 == "Find Brewery"
         end
         z = Brewery.find_by(name: y)
         
-        puts z.info
-        @prompt.keypress("Press any key to see the menu")
-        beers_select_label(z.beers)
+        see_menu_labels(z)
         start_prompt
     when "Country"
         user_input = ask("What is the name of the country?")
@@ -151,9 +160,7 @@ elsif answer1 == "Find Brewery"
             brewery.name == y
         end 
         
-        puts z.info
-        @prompt.keypress("Press any key to see the menu")
-        beers_select_label(z.beers)
+        see_menu_labels(z)
         start_prompt
     when "Display\ All"
         x = @prompt.select("Click to see more info:") do |options| 
@@ -163,9 +170,7 @@ elsif answer1 == "Find Brewery"
         end
     
         z = Brewery.find_by(name: x)
-        puts z.info
-        @prompt.keypress("Press any key to see the menu")
-        beers_select_label(z.beers)
+        see_menu_labels(z)
         start_prompt
     end 
 elsif answer1 == "Exit"
