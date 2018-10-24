@@ -22,7 +22,7 @@ def ask(question)
 end
 
 def more_info(found_object)
-  @prompt.select("Click to see more info:") do |options|
+  @prompt.select("Click to see more info:", filter: true) do |options|
     found_object.collect do |p|
       options.choice p.name 
     end
@@ -30,7 +30,7 @@ def more_info(found_object)
 end
 
 def beers_select_label(all_beers)
-    x = @prompt.select("Click to see more info:") do |options| 
+    x = @prompt.select("Click to see more info:", filter: true) do |options| 
         all_beers.collect do |beer|
             options.choice beer.name
         end 
@@ -49,28 +49,23 @@ def see_menu_labels(results)
     beers_select_label(results.beers)
 end
 
+def start_prompt_beers_name
 
-def start_prompt
-answer1 = @prompt.select("What do you want to do?", 
-    %w(Find\ Beer Find\ Brewery Exit))
-if answer1 == "Find Beer"
-    
-    answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style Display\ All))
-    case answer2 
-    when "Name" 
-
-        user_input = ask("What is the name of the beer?")
-        begin
-        x = Beer.find_by(name: spacing(user_input))
-          
-        puts x.label
+    user_input = ask("What is the name of the beer?")
+    begin
+    x = Beer.find_by(name: spacing(user_input))
+      
+    puts x.label
     rescue 
-        not_found
+    puts "Sorry, we couldn't find that one."
+        start_prompt_beers_name
     end
     start_prompt
 
-    when "Brewery"
-        user_input = ask("What is the name of the brewery?")
+end 
+
+def start_prompt_beer_by_brewery
+    user_input = ask("What is the name of the brewery?")
         begin 
         found_brewery = Brewery.find_by(name: spacing(user_input))
         
@@ -82,20 +77,58 @@ if answer1 == "Find Beer"
         
         puts Beer.find_by(name: x).label
     rescue 
-        not_found
+        puts "Sorry, we couldn't find that one."
+        start_prompt_beer_by_brewery
     end
     start_prompt
         
-    when "Style"
-        user_input = ask("Which style?") 
+end 
+
+def start_prompt_beer_by_style
+    user_input = ask("Which style?") 
         begin    
         found_by_style = Beer.find_by_style(spacing(user_input))
         rescue
-            not_found
+            puts "Sorry, we couldn't find that one."
+             start_prompt_beer_by_style
         end
         x= more_info(found_by_style)
         puts Beer.find_by(name: x).label
         start_prompt
+end 
+
+def start_prompt_brewery_by_name
+    user_input = ask("What is the name of the brewery?")
+    begin 
+    x = Brewery.find_by(name: spacing(user_input))
+    puts x.info
+    rescue 
+        puts "Sorry, we couldn't find that one."
+             start_prompt_brewery_by_name
+    end
+
+    @prompt.keypress("Press any key to see the menu")
+    beers_select_label(x.beers)
+end 
+
+
+def start_prompt
+answer1 = @prompt.select("What do you want to do?", 
+    %w(Find\ Beer Find\ Brewery Exit))
+if answer1 == "Find Beer"
+    
+    answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style Display\ All))
+    case answer2 
+    when "Name" 
+
+        start_prompt_beers_name
+
+    when "Brewery"
+        start_prompt_beer_by_brewery
+
+    when "Style"
+        
+        start_prompt_beer_by_style
     
     when "Display\ All"
         beers_select_label(Beer.all)
@@ -106,15 +139,8 @@ elsif answer1 == "Find Brewery"
     answer2 = @prompt.select("How do you want to find a brewery?", %w(Name City State Country Display\ All))
     case answer2
     when "Name"
-        user_input = ask("What is the name of the brewery?")
-        begin 
-        x = Brewery.find_by(name: spacing(user_input))
-        puts x.info
-        rescue 
-            not_found
-        end
-        @prompt.keypress("Press any key to see the menu")
-        beers_select_label(x.beers)
+        start_prompt_brewery_by_name
+        
         start_prompt
     when "City"
         user_input = ask("What is the name of the city?")
