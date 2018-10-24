@@ -50,9 +50,18 @@ def see_menu_labels(results)
     beers_select_label(results.beers)
 end
 
+def exit?(user_input)
+    if user_input == "exit"
+        exit
+    elsif user_input == "back"
+        start_prompt 
+    end
+end
+
 def start_prompt_beers_name
 
     user_input = ask("What is the name of the beer?")
+    exit?(user_input)
     begin
     x = Beer.find_by(name: spacing(user_input))
       
@@ -67,6 +76,7 @@ end
 
 def start_prompt_beer_by_brewery
     user_input = ask("What is the name of the brewery?")
+    exit?(user_input)
         begin 
         found_brewery = Brewery.find_by(name: spacing(user_input))
         
@@ -87,6 +97,7 @@ end
 
 def start_prompt_beer_by_style
     user_input = ask("Which style?") 
+    exit?(user_input)
         begin    
         found_by_style = Beer.find_by_style(spacing(user_input))
         rescue
@@ -100,6 +111,7 @@ end
 
 def start_prompt_brewery_by_name
     user_input = ask("What is the name of the brewery?")
+    exit?(user_input)
     begin 
     x = Brewery.find_by(name: spacing(user_input))
         puts x.info
@@ -114,6 +126,7 @@ end
 
 def start_prompt_brewery_by_city
     user_input = ask("What is the name of the city?")
+    exit?(user_input)
         begin
             found_breweries = Brewery.select {|b| b.city == spacing(user_input)}
 
@@ -129,7 +142,7 @@ end
 
 def start_prompt_brewery_by_state
     user_input = ask("What is the name of the state?")
-           
+    exit?(user_input)       
     begin
     x = Brewery.select {|b| b.state == spacing(user_input)}
 
@@ -145,7 +158,7 @@ end
 
 def start_prompt_brewery_by_country
     user_input = ask("What is the name of the country?")
-        
+    exit?(user_input)    
         begin
         x = Brewery.select {|b| b.country == spacing(user_input)}
         

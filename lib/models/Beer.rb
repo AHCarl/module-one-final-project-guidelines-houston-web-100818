@@ -3,7 +3,7 @@ belongs_to :brewery
 belongs_to :style
 
 def label
-  str = "#{self.name} from #{self.brewery.name}"
+  str = "#{self.name} from #{self.brewery.name} (#{self.brewery.city}, #{self.brewery.country})"
   if self.has_style?
     str += ", a #{self.style.style_name}."
   end
