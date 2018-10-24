@@ -57,12 +57,7 @@ if answer1 == "Beer"
         user_input = ask("Which style?") 
             
         found_by_style = Beer.find_by_style(spacing(user_input))
-
-        # x= @prompt.select("Click to see more info:") do |options|
-        #     found_by_style.collect do |beer|
-        #         options.choice beer.name
-        #     end     
-        # end 
+ 
         x= more_info(found_by_style)
         puts Beer.find_by(name: x).label
     end
@@ -98,13 +93,6 @@ elsif answer1 == "Brewery"
            
 
         x = Brewery.select {|b| b.state == spacing(user_input)}
-        
-        # y = @prompt.select("Click to see more info:") do |options|
-        #     x.collect do |brewery|
-
-        #     options.choice brewery.name
-        #     end     
-        #  end 
 
         y = more_info(x)
         z = Brewery.find_by(name: y)
@@ -119,6 +107,9 @@ elsif answer1 == "Brewery"
         x = Brewery.select {|b| b.country == spacing(user_input)}
         
         y = more_info(x) 
+
+        binding.pry
+    
 
         z = x.find do |brewery|
             brewery.name == y
