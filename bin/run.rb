@@ -44,8 +44,9 @@ def not_found
 end
 
 def start_prompt
-answer1 = @prompt.select("What do you want to find?", %w(Beer Brewery))
-if answer1 == "Beer"
+answer1 = @prompt.select("What do you want to do?", 
+    %w(Find\ Beer Find\ Brewery Exit))
+if answer1 == "Find Beer"
     
     answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style Display\ All))
     case answer2 
@@ -91,7 +92,7 @@ if answer1 == "Beer"
     end
 
 
-elsif answer1 == "Brewery"
+elsif answer1 == "Find Brewery"
     answer2 = @prompt.select("How do you want to find a brewery?", %w(Name City State Country Display\ All))
     case answer2
     when "Name"
@@ -104,7 +105,7 @@ elsif answer1 == "Brewery"
         end
         @prompt.keypress("Press any key to see the menu")
         beers_select_label(x.beers)
-    
+        start_prompt
     when "City"
         user_input = ask("What is the name of the city?")
         begin
@@ -119,7 +120,7 @@ elsif answer1 == "Brewery"
         puts z.info
         @prompt.keypress("Press any key to see the menu")
         beers_select_label(z.beers)
-    
+        start_prompt
     when "State"
         user_input = ask("What is the name of the state?")
            
@@ -135,7 +136,7 @@ elsif answer1 == "Brewery"
         puts z.info
         @prompt.keypress("Press any key to see the menu")
         beers_select_label(z.beers)
-    
+        start_prompt
     when "Country"
         user_input = ask("What is the name of the country?")
         
@@ -153,7 +154,7 @@ elsif answer1 == "Brewery"
         puts z.info
         @prompt.keypress("Press any key to see the menu")
         beers_select_label(z.beers)
-    
+        start_prompt
     when "Display\ All"
         x = @prompt.select("Click to see more info:") do |options| 
             Brewery.all.collect do |brewery|
@@ -165,10 +166,12 @@ elsif answer1 == "Brewery"
         puts z.info
         @prompt.keypress("Press any key to see the menu")
         beers_select_label(z.beers)
-        
+        start_prompt
     end 
+elsif answer1 == "Exit"
+exit 
+end
 
-end 
 end
 
 start_prompt
