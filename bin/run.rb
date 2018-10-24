@@ -1,7 +1,8 @@
 require_relative '../config/environment'
 system "clear"
 
-@prompt = TTY::Prompt.new
+
+@prompt = TTY::Prompt.new(enable_color: true)
 
 rando_beer = Beer.find(111)
 milly = Brewery.find(858)
@@ -101,7 +102,7 @@ def start_prompt_brewery_by_name
     user_input = ask("What is the name of the brewery?")
     begin 
     x = Brewery.find_by(name: spacing(user_input))
-    puts x.info
+        puts x.info
     rescue 
         puts "Sorry, we couldn't find that one."
              start_prompt_brewery_by_name
@@ -111,6 +112,54 @@ def start_prompt_brewery_by_name
     beers_select_label(x.beers)
 end 
 
+def start_prompt_brewery_by_city
+    user_input = ask("What is the name of the city?")
+        begin
+            found_breweries = Brewery.select {|b| b.city == spacing(user_input)}
+
+            y = more_info(found_breweries)
+        rescue
+            puts "Sorry, we couldn't find that one."
+            start_prompt_brewery_by_city
+        end
+        z = Brewery.find_by(name: y)
+        
+        see_menu_labels(z)
+end 
+
+def start_prompt_brewery_by_state
+    user_input = ask("What is the name of the state?")
+           
+    begin
+    x = Brewery.select {|b| b.state == spacing(user_input)}
+
+    y = more_info(x)
+    rescue
+        puts "Sorry, we couldn't find that one."
+        start_prompt_brewery_by_state
+    end
+    z = Brewery.find_by(name: y)
+    
+    see_menu_labels(z)
+end 
+
+def start_prompt_brewery_by_country
+    user_input = ask("What is the name of the country?")
+        
+        begin
+        x = Brewery.select {|b| b.country == spacing(user_input)}
+        
+        y = more_info(x)
+        rescue
+            puts "Sorry, we couldn't find that one."
+            start_prompt_brewery_by_country
+        end
+        z = x.find do |brewery|
+            brewery.name == y
+        end 
+        
+        see_menu_labels(z)
+end
 
 def start_prompt
 answer1 = @prompt.select("What do you want to do?", 
@@ -143,50 +192,13 @@ elsif answer1 == "Find Brewery"
         
         start_prompt
     when "City"
-        user_input = ask("What is the name of the city?")
-        begin
-        found_breweries = Brewery.select {|b| b.city == spacing(user_input)}
-
-        y = more_info(found_breweries)
-        rescue
-            not_found
-        end
-        z = Brewery.find_by(name: y)
-        
-        # puts z.info
-        # @prompt.keypress("Press any key to see the menu")
-        # beers_select_label(z.beers)
-        see_menu_labels(z)
+        start_prompt_brewery_by_city
         start_prompt
     when "State"
-        user_input = ask("What is the name of the state?")
-           
-        begin
-        x = Brewery.select {|b| b.state == spacing(user_input)}
-
-        y = more_info(x)
-        rescue
-            not_found
-        end
-        z = Brewery.find_by(name: y)
-        
-        see_menu_labels(z)
+        start_prompt_brewery_by_state
         start_prompt
     when "Country"
-        user_input = ask("What is the name of the country?")
-        
-        begin
-        x = Brewery.select {|b| b.country == spacing(user_input)}
-        
-        y = more_info(x)
-        rescue
-            not_found
-        end
-        z = x.find do |brewery|
-            brewery.name == y
-        end 
-        
-        see_menu_labels(z)
+        start_prompt_brewery_by_country
         start_prompt
     when "Display\ All"
         x = @prompt.select("Click to see more info:") do |options| 
