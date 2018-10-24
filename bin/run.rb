@@ -1,4 +1,6 @@
 require_relative '../config/environment'
+system "clear"
+
 @prompt = TTY::Prompt.new
 
 rando_beer = Beer.find(111)
@@ -27,10 +29,20 @@ def more_info(found_object)
   end
 end
 
+def beers_select_label(all_beers)
+    x = @prompt.select("Click to see more info:") do |options| 
+        all_beers.collect do |beer|
+            options.choice beer.name
+        end 
+    end
+
+    puts Beer.find_by(name: x).label
+end
+
 answer1 = @prompt.select("What do you want to find?", %w(Beer Brewery))
 
 if answer1 == "Beer"
-    answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style))
+    answer2 = @prompt.select("How do you want to find a beer?", %w(Name Brewery Style Display\ All))
 
     case answer2 
     when "Name" 
@@ -60,11 +72,14 @@ if answer1 == "Beer"
  
         x= more_info(found_by_style)
         puts Beer.find_by(name: x).label
+    
+    when "Display\ All"
+        beers_select_label(Beer.all)
     end
 
 
 elsif answer1 == "Brewery"
-    answer2 = @prompt.select("How do you want to find a brewery?", %w(Name City State Country))
+    answer2 = @prompt.select("How do you want to find a brewery?", %w(Name City State Country Display\ All))
     case answer2
     when "Name"
         user_input = ask("What is the name of the brewery?")
@@ -73,7 +88,7 @@ elsif answer1 == "Brewery"
         puts x.info
 
         @prompt.keypress("Press any key to see the menu")
-        puts x.menu
+        beers_select_label(x.beers)
     
     when "City"
         user_input = ask("What is the name of the city?")
@@ -86,7 +101,7 @@ elsif answer1 == "Brewery"
         
         puts z.info
         @prompt.keypress("Press any key to see the menu")
-        puts z.menu
+        beers_select_label(z.beers)
     
     when "State"
         user_input = ask("What is the name of the state?")
@@ -99,26 +114,35 @@ elsif answer1 == "Brewery"
         
         puts z.info
         @prompt.keypress("Press any key to see the menu")
-        puts z.menu
+        beers_select_label(z.beers)
     
     when "Country"
         user_input = ask("What is the name of the country?")
             
         x = Brewery.select {|b| b.country == spacing(user_input)}
         
-        y = more_info(x) 
-
-        binding.pry
+        y = more_info(x)
     
-
         z = x.find do |brewery|
             brewery.name == y
         end 
         
         puts z.info
         @prompt.keypress("Press any key to see the menu")
-        puts z.menu
-
+        beers_select_label(z.beers)
+    
+    when "Display\ All"
+        x = @prompt.select("Click to see more info:") do |options| 
+            Brewery.all.collect do |brewery|
+                options.choice brewery.name
+            end 
+        end
+    
+        z = Brewery.find_by(name: x)
+        puts z.info
+        @prompt.keypress("Press any key to see the menu")
+        beers_select_label(z.beers)
+        
     end 
 
 end 
