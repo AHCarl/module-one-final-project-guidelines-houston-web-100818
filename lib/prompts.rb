@@ -211,7 +211,7 @@ elsif answer1 == "Find Brewery"
         start_prompt_brewery_by_country
         start_prompt
     when "Display\ All"
-        x = @prompt.select("Click to see more info:") do |options| 
+        x = @prompt.select("Click to see more info:", filter: true) do |options| 
             Brewery.all.collect do |brewery|
                 options.choice brewery.name
             end 
